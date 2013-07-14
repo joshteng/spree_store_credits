@@ -10,4 +10,9 @@ class Spree::StoreCredit < ActiveRecord::Base
     belongs_to :user
     attr_accessible :amount, :remaining_amount, :reason, :user_id
   end
+
+  ##JOSH
+  Spree::Config[:use_store_credit_minimum] = 0.01
+  ##JOSH
+  
 end

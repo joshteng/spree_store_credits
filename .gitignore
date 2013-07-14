@@ -4,3 +4,5 @@ Gemfile.lock
 .bundle
 .rvmrc
 .sass-cache
+
+*.DS_Store
