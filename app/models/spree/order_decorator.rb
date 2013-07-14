@@ -17,10 +17,21 @@ module Spree
     ##JOSH
     def available_payment_methods
       return orig_available_payment_methods unless self.user && self.total <= self.user.store_credits_total
+      return orig_available_payment_methods if self.buying_credit?
 
       @available_payment_methods = []
     end
     ##JOSH
+
+    def buying_credit?
+      self.line_items.each do |line_item|
+        variant = line_item.variant
+        if variant.sku.downcase == 'credits'
+          return true
+        end
+      end
+      return false
+    end
 
     def process_payments_with_credits!
       if total > 0 && pending_payments.empty?

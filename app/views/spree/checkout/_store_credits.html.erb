@@ -1,34 +1,40 @@
 <% if (spree_current_user && spree_current_user.store_credits_total > 0) %>
 
-<% if @order.available_payment_methods.empty? %>
 
-  <% usable_amount = number_with_precision(@order.total, :precision => 2, :separator => '.', :delimiter => '') %>
-
-  <%= t('amount_to_be_deducted', :amount => money(usable_amount)) %>
-  <%= t('you_have_store_credit', :amount => money(spree_current_user.store_credits_total))%>
-
+  <% if @order.buying_credit? %>
   <%= form.text_field :store_credit_amount, 
-        :hidden => true, :size => 19, :value => usable_amount, 
-        :data => { :store_credit_maximum_amount => usable_amount, 
+        :hidden => true, :size => 19, :value => 0, 
+        :data => { :store_credit_maximum_amount => 0, 
                    :store_credit_maximum_amount_message => t('store_credit_maximum_amount', 
-                   :amount => money(@order.store_credit_maximum_usable_amount))
+                   :amount => money(0))
                  } %>
+  <% elsif @order.available_payment_methods.empty? %>
+    <% usable_amount = number_with_precision(@order.total, :precision => 2, :separator => '.', :delimiter => '') %>
 
-<% else %>
+    <%= t('amount_to_be_deducted', :amount => money(usable_amount)) %>
+    <%= t('you_have_store_credit', :amount => money(spree_current_user.store_credits_total))%>
 
-  <h3>Pay a portion of the total with your store credits %></h3>
+    <%= form.text_field :store_credit_amount, 
+          :hidden => true, :size => 19, :value => usable_amount, 
+          :data => { :store_credit_maximum_amount => usable_amount, 
+                     :store_credit_maximum_amount_message => t('store_credit_maximum_amount', 
+                     :amount => money(@order.store_credit_maximum_usable_amount))
+                   } %>
+  <% else %>
 
-  <% usable_amount = number_with_precision(@order.store_credit_maximum_usable_amount, :precision => 2, :separator => '.', :delimiter => '') %>
+    <h3>Pay a portion of the total with your store credits %></h3>
 
-  <%= t('you_have_store_credit', :amount => money(spree_current_user.store_credits_total))%><br />
+    <% usable_amount = number_with_precision(@order.store_credit_maximum_usable_amount, :precision => 2, :separator => '.', :delimiter => '') %>
 
-  <label><%= t('enter_desired_amount_of_store_credit', :amount => money(spree_current_user.store_credits_total)) %></label><br />
-  <%= form.text_field :store_credit_amount, 
-        :size => 19, :value => usable_amount, 
-        :data => { :store_credit_maximum_amount => usable_amount, 
-                   :store_credit_maximum_amount_message => t('store_credit_maximum_amount', 
-                   :amount => money(@order.store_credit_maximum_usable_amount))
-                 } %>
-<% end %>
+    <%= t('you_have_store_credit', :amount => money(spree_current_user.store_credits_total))%><br />
+
+    <label><%= t('enter_desired_amount_of_store_credit', :amount => money(spree_current_user.store_credits_total)) %></label><br />
+    <%= form.text_field :store_credit_amount, 
+          :size => 19, :value => usable_amount, 
+          :data => { :store_credit_maximum_amount => usable_amount, 
+                     :store_credit_maximum_amount_message => t('store_credit_maximum_amount', 
+                     :amount => money(@order.store_credit_maximum_usable_amount))
+                   } %>
+  <% end %>
 
 <% end %>
