@@ -3,7 +3,7 @@ module Spree
     before_filter :remove_payments_attributes_if_total_is_zero
 
     alias_method :orig_update, :update
-    alias_method :orig_paypal_finish, :paypal_finish
+    # alias_method :orig_paypal_finish, :paypal_finish
 
     # ##JOSH
     # # Updates the order and advances to the next state (when possible.)
@@ -55,13 +55,13 @@ module Spree
 
     ##JOSH: To make it work with spree_paypal_express gem
     ##JOSH
-    def paypal_finish
-      if @order.state = "confirm"
-        process_and_add_store_credit(@order)
-      end
+    # def paypal_finish
+    #   if @order.state = "confirm"
+    #     process_and_add_store_credit(@order)
+    #   end
 
-      return orig_paypal_finish
-    end
+    #   return orig_paypal_finish
+    # end
     ##JOSH
 
     private
